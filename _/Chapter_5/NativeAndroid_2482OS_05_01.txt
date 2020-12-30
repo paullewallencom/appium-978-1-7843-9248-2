@@ -1,0 +1,45 @@
+package com.example.appium;
+
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class TestAppIication {
+ AndroidDriver driver;
+ @BeforeClass
+ public void setUp() throws MalformedURLException{
+      DesiredCapabilities caps = new DesiredCapabilities();
+      caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "4.4");
+      caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+      caps.setCapability(MobileCapabilityType.DEVICE_NAME,"Android emulator");  
+      caps.setCapability("avd","AVD_Nexus_4");// Mention the created AVD name 
+      caps.setCapability(MobileCapabilityType.APP_PACKAGE,"com.android.calculator2"); 
+      caps.setCapability(MobileCapabilityType.APP_ACTIVITY,"com.android.calculator2.Calculator"); 
+      driver = new AndroidDriver (new URL("http://127.0.0.1:4723/wd/hub"), caps);
+      driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
+ }
+ @Test
+ public void testExample(){
+	WebElement five=driver.findElement(By.name("5"));
+	five.click();
+	WebElement plus=driver.findElement(By.name("+"));
+	plus.click();
+	WebElement four=driver.findElement(By.name("4"));
+	four.click();
+        WebElement equalTo=driver.findElementByAccessibilityId("equals");
+        equalTo.click();
+ }
+ @AfterClass
+ public void tearDown(){
+	driver.closeApp();
+ } 
+ }

@@ -1,0 +1,54 @@
+package com.example.appium;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners({ScreenshotListener.class})
+public class Screenshot {
+static AppiumDriver driver;
+@BeforeClass	 
+public void setUp() throws MalformedURLException{
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "4.4");
+        caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+        caps.setCapability(MobileCapabilityType.DEVICE_NAME,"Moto X");//I am using Moto X as a Real Device                    caps.setCapability(MobileCapabilityType.APP_PACKAGE,"com.android.calculator2");       
+        caps.setCapability(MobileCapabilityType.APP_ACTIVITY,"com.android.calculator2.Calculator"); 
+	driver = new AndroidDriver (new URL("http://127.0.0.1:4723/wd/hub"), caps);
+	driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
+	 }
+ @Test
+ public void testExample() throws IOException{
+	 WebElement two=driver.findElement(By.name("2"));
+         two.click();
+         WebElement plus=driver.findElement(By.name("+"));
+         plus.click(); 
+         WebElement four=driver.findElement(By.name("4"));
+         four.click();
+         WebElement equalTo=driver.findElement(By.name("="));
+         equalTo.click();	 
+         WebElement result=
+         driver.findElement(By.className("android.widget.EditText"));
+         //Check the calculated value on the edit box
+	 assert result.getText().equals("8"):"Actual value is : "+result.getText()+" did not match with expected value: 8";
+	}
+@AfterClass
+public void tearDown(){
+	driver.closeApp();
+	 } 
+public static AppiumDriver getDriver(){
+	 return driver;
+	 }
+	 }
+

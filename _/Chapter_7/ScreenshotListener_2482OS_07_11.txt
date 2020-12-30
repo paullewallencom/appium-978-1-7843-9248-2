@@ -1,0 +1,25 @@
+package com.example.appium;
+
+import io.appium.java_client.AppiumDriver;
+import java.io.File;
+import java.io.IOException;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.testng.ITestResult;
+import org.testng.TestListenerAdapter;
+
+public class ScreenshotListener extends TestListenerAdapter{
+@Override
+public void onTestFailure(ITestResult tr){
+          AppiumDriver driver=Screenshot.getDriver();// getting driver instance from TestApplication class 
+          File location=new File("screenshots");// it will create screenshots folder in the project
+          String screenShotName = location.getAbsolutePath()+File.separator+     tr.getMethod().getMethodName()+".png";//Getting failure method name using ITestResult 
+          File screenShot=driver.getScreenshotAs(OutputType.FILE);
+          try {
+	  FileUtils.copyFile(screenShot,new File(screenShotName));				
+           } 
+          catch (IOException e) {								
+          e.printStackTrace();
+	} 
+	}
+           }

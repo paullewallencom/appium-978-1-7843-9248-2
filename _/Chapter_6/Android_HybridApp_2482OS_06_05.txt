@@ -1,0 +1,56 @@
+package com.example.appium;
+
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+
+public class TestAppIication {
+	AndroidDriver driver; 
+ @BeforeClass
+ public void setUp() throws MalformedURLException{
+      DesiredCapabilities caps = new DesiredCapabilities();
+      caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "4.4");
+      caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+      caps.setCapability(MobileCapabilityType.DEVICE_NAME,"Moto X");
+      caps.setCapability(MobileCapabilityType.AUTOMATION_NAME,"Appium");//Use Selendroid in case of <4.4 android version
+      caps.setCapability(MobileCapabilityType.APP_PACKAGE, "com.example.hybridtestapp");
+      caps.setCapability(MobileCapabilityType.APP_ACTIVITY, "com.example.hybridtestapp.MainActivity");
+      driver = new AndroidDriver (new URL("http://127.0.0.1:4723/wd/hub"), caps);
+      driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
+
+ }
+ @Test
+ public void testExample(){
+	         Set<String> contexts = driver.getContextHandles();
+		 for (String context : contexts) {
+		 System.out.println(context); //it will print NATIVE_APP \n WEBVIEW_com.example.hybridtestapp
+		 }
+		 driver.context((String) contexts.toArray()[1]);
+		 WebElement firstName=driver.findElement(By.name("fname"));
+		 firstName.sendKeys("test");
+		 WebElement lastName=driver.findElement(By.name("lname"));
+		 lastName.sendKeys("test");
+		 WebElement age=driver.findElement(By.name("age"));
+		 age.sendKeys("26");
+		 WebElement username=driver.findElement(By.name("username"));
+		 username.sendKeys("appiumTester");
+		 WebElement password=driver.findElement(By.id("psw"));
+		 password.sendKeys("appium@123");
+		 WebElement registerButton=driver.findElement(By.id("register"));
+		 registerButton.click();   
+   }
+@AfterClass
+ public void tearDown(){
+	driver.closeApp();
+ } 
+ }
